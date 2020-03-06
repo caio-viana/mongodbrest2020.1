@@ -116,9 +116,33 @@ public class MongoDbRest20201Application implements CommandLineRunner {
 			.get()
 			.toString());
 		
+		class AncestralIdade {
+			private Ancestral ancestral;
+			private int idade;
+			
+			AncestralIdade(Ancestral ancestral, int idade) {
+				this.ancestral = ancestral;
+				this.idade = idade;
+			}
+			
+			int getIdade() {
+				return this.idade;
+			}
+			
+			@Override
+			public String toString() {
+				return this.ancestral.toString() + "Idade: " + this.idade;
+			}
+		}
+		
 		// ANCESTRAL DE MAIOR IDADE (E SUA IDADE)
 		System.out.println("*** ANCESTRAL DE MAIOR IDADE ***");
-		
+		System.out.println(listaAncestrais.stream()
+			.map(a -> new AncestralIdade(a, a.getAnoMorte() - a.getAnoNascimento()))
+			.sorted(Comparator.comparing(AncestralIdade::getIdade).reversed())
+			.findFirst()
+			.get());
+			
 	}
 
 }
