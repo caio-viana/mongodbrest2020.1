@@ -116,6 +116,8 @@ public class MongoDbRest20201Application implements CommandLineRunner {
 			.get()
 			.toString());
 		
+		
+		// CLASSE AUXILIAR PARA ARMAZENAR UM ANCESTRAL E SUA IDADE
 		class AncestralIdade {
 			private Ancestral ancestral;
 			private int idade;
@@ -139,10 +141,24 @@ public class MongoDbRest20201Application implements CommandLineRunner {
 		System.out.println("*** ANCESTRAL DE MAIOR IDADE ***");
 		System.out.println(listaAncestrais.stream()
 			.map(a -> new AncestralIdade(a, a.getAnoMorte() - a.getAnoNascimento()))
-			.sorted(Comparator.comparing(AncestralIdade::getIdade).reversed())
+			.sorted(Comparator.comparing(AncestralIdade::getIdade).reversed())  // ordenando em ordem DECRESCENTE de idade
 			.findFirst()
 			.get());
 			
+		// IDADE MÉDIA DOS ANCESTRAIS
+		System.out.println("*** IDADE MÉDIA DOS ANCESTRAIS ***");
+		System.out.println(listaAncestrais.stream()
+				.map(a -> new AncestralIdade(a, a.getAnoMorte() - a.getAnoNascimento()))
+				.mapToInt(AncestralIdade::getIdade)
+				.average()
+				.getAsDouble());
+		
+		// IDADE MÉDIA DOS ANCESTRAIS - VERSÃO 2
+		System.out.println("*** IDADE MÉDIA DOS ANCESTRAIS - VERSÃO 2 ***");
+		System.out.println(listaAncestrais.stream()
+				.mapToInt(a -> a.getAnoMorte() - a.getAnoNascimento())
+				.average()
+				.getAsDouble());
 	}
 
 }
